@@ -17,3 +17,4 @@ pip install -r requeriments.txt
 ```bash
 python3 test.py
 ```
+Finalmente la app corre sobre la ip: "http://127.0.0.1:5000"
