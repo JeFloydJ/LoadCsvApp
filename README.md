@@ -7,6 +7,11 @@ Floyd Load CSV App es una aplicación web sencilla construida con Flask que perm
 - Carga de archivos CSV.
 - Mensajes de alerta en JavaScript para confirmar la carga exitosa de los archivos.
 
+## Requerimientos
+para instalar los requisitos de la app:
+```bash
+pip install -r requeriments.txt
+```
 ## Probar la App:
 - Sobre el repositorio principal, ejecutar
 ```bash
