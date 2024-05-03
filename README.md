@@ -1,6 +1,6 @@
 # Floyd Load CSV App
 
-Floyd Load CSV App es una aplicación web sencilla construida con Flask que permite a los usuarios cargar archivos CSV y visualizar sus datos en una tabla HTML.
+Floyd Load CSV App es una aplicación web sencilla construida con Flask que permite a los usuarios cargar archivos CSV en un path en especifico
 
 ## Características
 
