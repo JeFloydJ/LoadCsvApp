@@ -14,8 +14,9 @@ def index():
             uploaded_file.save(filepath)
             with open(filepath) as file:
                 csv_file = csv.reader(file)
+                headers = next(csv_file)
                 for row in csv_file:
-                    data.append(row)
+                    data.append(dict(zip(headers, row)))
             return jsonify({'message': 'Enviado exitosamente', 'data': data})
     return render_template('index.html', data=data)
 
