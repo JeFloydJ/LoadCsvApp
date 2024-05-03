@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block body %}
+
+<div class="jumbotron">
+    <h1 style='text-align: center'>floyd load csv app</h1>
+</div>
+<div>
+    <p class="lead centered-text">Upload a csv file to view its data.</p>
+    <form id="upload-form" method="POST" enctype="multipart/form-data" action="/">
+        <input type="file" id="myFile" name="filename" accept=".csv">
+        <input type="submit">
+    </form>
+</div>
+<div id="data">
+    {{ data }}
+</div>
+<div>
+
+<script>
+$(document).ready(function(){
+    $('#upload-form').on('submit', function(event){
+        event.preventDefault();
+        var formData = new FormData(this);
+        $.ajax({
+            url: "/",
+            method:"POST",
+            data:formData,
+            contentType: false,
+            cache: false,
+            processData: false,
+            success:function(response){
+                alert(response.message);
+                $('#upload-form')[0].reset();
+                $('#data').empty();
+            }
+        })
+    });
+});
+</script>
+
+{% endblock %}
