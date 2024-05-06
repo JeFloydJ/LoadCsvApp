@@ -9,13 +9,18 @@ Floyd Load CSV App is a simple web application built with Flask that allows user
 
 ## Requirements
 to install the app requirements:
-````bash
+
+```bash
 pip install -r requeriments.txt
 ```
-## Test the App:
+
+##  Test the App:
+
 - On the main repository, run
-````bash
+
+```bash
 python3 test.py
 ```
+
 Finally the app runs on the ip: "http://127.0.0.1:5000"
 
