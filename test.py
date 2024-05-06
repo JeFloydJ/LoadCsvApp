@@ -41,8 +41,8 @@ def help():
     return render_template('help.html')
 
 # Set the FILE_UPLOADS configuration to the specified path
-app.config['FILE_UPLOADS'] = "/Users/juanestebanfloyd/Documents/testFlaskApp"
+app.config['FILE_UPLOADS'] = os.getenv('FILE_UPLOADS')
 
 # If this script is run directly (not imported), start the Flask web server in debug mode
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=os.getenv('FLASK_DEBUG', True))
