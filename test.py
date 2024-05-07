@@ -39,13 +39,21 @@ def show():
     except NoCredentialsError:
         return jsonify({'error': 'No se encontraron las credenciales de AWS'})
 
-
     with open('/tmp/' + file_name, 'r') as f:
         csv_file = csv.reader(f)
         data = list(csv_file)
 
     return jsonify({'data': data})
 
+@app.route('/delete', methods=["POST"])
+def delete():
+    file_name = 'export.csv'  
+    bucket_name = os.getenv('BUCKET_NAME')
+    try:
+        s3.delete_object(Bucket=bucket_name, Key=file_name)
+        return jsonify({'message': 'Archivo eliminado exitosamente'})
+    except NoCredentialsError:
+        return jsonify({'error': 'No se encontraron las credenciales de AWS'})
 
 @app.route('/help')
 def help():
