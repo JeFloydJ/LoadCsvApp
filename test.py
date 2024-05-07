@@ -5,6 +5,8 @@ import os
 import csv
 import boto3
 from dotenv import load_dotenv
+from botocore.exceptions import NoCredentialsError
+
 load_dotenv()
 
 app = Flask(__name__)
@@ -27,6 +29,23 @@ def index():
             s3.upload_fileobj(uploaded_file, os.getenv('BUCKET_NAME'), uploaded_file.filename)
             return jsonify({'message': 'Successfully sent'})
     return render_template('index.html')
+
+@app.route('/show', methods=["GET"])
+def show():
+    bucket_name = os.getenv('BUCKET_NAME')
+    file_name = 'export.csv'  
+    try:
+        s3.download_file(bucket_name, file_name, '/tmp/' + file_name)
+    except NoCredentialsError:
+        return jsonify({'error': 'No se encontraron las credenciales de AWS'})
+
+
+    with open('/tmp/' + file_name, 'r') as f:
+        csv_file = csv.reader(f)
+        data = list(csv_file)
+
+    return jsonify({'data': data})
+
 
 @app.route('/help')
 def help():

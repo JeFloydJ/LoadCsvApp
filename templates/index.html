@@ -10,29 +10,55 @@
     <form id="upload-form" method="POST" enctype="multipart/form-data" action="/">
         <input type="file" id="myFile" name="filename" accept=".csv">
         <input type="submit">
+        <button id="show-button">Mostrar</button>
     </form>
 </div>
 
+<div id="table-container"></div>
+
 <script>
-$(document).ready(function(){
-    $('#upload-form').on('submit', function(event){
-        event.preventDefault();
-        var formData = new FormData(this);
-        $.ajax({
-            url: "/",
-            method:"POST",
-            data:formData,
-            contentType: false,
-            cache: false,
-            processData: false,
-            success:function(response){
-                alert(response.message);
-                $('#upload-form')[0].reset();
-                $('#data').empty();
-            }
-        })
+    $(document).ready(function(){
+        $('#upload-form').on('submit', function(event){
+            event.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: "/",
+                method:"POST",
+                data:formData,
+                contentType: false,
+                cache: false,
+                processData: false,
+                success:function(response){
+                    alert(response.message);
+                    $('#upload-form')[0].reset();
+                    $('#data').empty();
+                }
+            })
+        });
+    
+        $('#show-button').on('click', function(event){
+            event.preventDefault();
+            $.ajax({
+                url: "/show",
+                method:"GET",
+                success:function(response){
+                    var data = response.data;
+                    var html = '<table>';
+                    for(var i=0; i<data.length; i++){
+                        html += '<tr>';
+                        var row = data[i][0].split(';');
+                        for(var j=0; j<row.length; j++){
+                            html += '<td>' + row[j].split(':').join('<br>') + '</td>';
+                        }
+                        html += '</tr>';
+                    }
+                    html += '</table>';
+                    $('#table-container').html(html);
+                }
+            })
+        });
     });
-});
-</script>
+    </script>
+    
 
 {% endblock %}
