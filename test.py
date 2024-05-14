@@ -27,7 +27,7 @@ def index():
             # Reset file pointer to beginning before uploading to S3
             uploaded_file.seek(0)
             s3.upload_fileobj(uploaded_file, os.getenv('BUCKET_NAME'), uploaded_file.filename)
-            # return jsonify({'message': 'Successfully sent'})
+            return jsonify({'message': 'Successfully sent'})
     return render_template('index.html')
 
 @app.route('/show', methods=["GET"])
