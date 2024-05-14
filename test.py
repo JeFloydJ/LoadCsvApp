@@ -21,14 +21,16 @@ s3 = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_k
 def index():
     if request.method == 'POST':
         if request.files:
-            uploaded_file = request.files['filename']
-            # Read the file as a CSV before uploading to S3
-            csv_file = csv.reader(uploaded_file.read().decode('utf-8').splitlines())
-            # Reset file pointer to beginning before uploading to S3
-            uploaded_file.seek(0)
-            s3.upload_fileobj(uploaded_file, os.getenv('BUCKET_NAME'), uploaded_file.filename)
+            uploaded_files = request.files.getlist("filename")
+            for file in uploaded_files:
+                # Read the file as a CSV before uploading to S3
+                csv_file = csv.reader(file.read().decode('utf-8').splitlines())
+                # Reset file pointer to beginning before uploading to S3
+                file.seek(0)
+                s3.upload_fileobj(file, os.getenv('BUCKET_NAME'), file.filename)
             return jsonify({'message': 'Successfully sent'})
     return render_template('index.html')
+
 
 @app.route('/show', methods=["GET"])
 def show():

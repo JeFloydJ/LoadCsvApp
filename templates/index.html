@@ -8,12 +8,12 @@
 </head>
 <body>
     <div class="jumbotron">
-        <h1 style='text-align: center'>floyd load csv app</h1>
+        <h1 style='text-align: center'>Load csv app</h1>
     </div>
     <div>
         <p class="lead centered-text">Upload a csv file</p>
         <form id="upload-form" method="POST" enctype="multipart/form-data" action="/">
-            <input type="file" id="myFile" name="filename" accept=".csv">
+            <input type="file" id="myFile" name="filename" accept=".csv" multiple>
             <input type="submit">
             <button id="show-button">Mostrar</button>
             <button id="delete-button" action="/delete" >Eliminar</button>
