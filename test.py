@@ -27,13 +27,13 @@ def index():
             # Reset file pointer to beginning before uploading to S3
             uploaded_file.seek(0)
             s3.upload_fileobj(uploaded_file, os.getenv('BUCKET_NAME'), uploaded_file.filename)
-            return jsonify({'message': 'Successfully sent'})
+            # return jsonify({'message': 'Successfully sent'})
     return render_template('index.html')
 
 @app.route('/show', methods=["GET"])
 def show():
     bucket_name = os.getenv('BUCKET_NAME')
-    file_name = 'export.csv'  
+    file_name = 'Veevart Organizations Report test.csv'  
     try:
         s3.download_file(bucket_name, file_name, '/tmp/' + file_name)
     except NoCredentialsError:
@@ -47,7 +47,7 @@ def show():
 
 @app.route('/delete', methods=["POST"])
 def delete():
-    file_name = 'export.csv'  
+    file_name = 'Veevart Organizations Report test.csv'  
     bucket_name = os.getenv('BUCKET_NAME')
     try:
         s3.delete_object(Bucket=bucket_name, Key=file_name)

@@ -1,81 +1,86 @@
-{% extends "base.html" %}
-{% block title %}Home{% endblock %}
-{% block body %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="jumbotron">
+        <h1 style='text-align: center'>floyd load csv app</h1>
+    </div>
+    <div>
+        <p class="lead centered-text">Upload a csv file</p>
+        <form id="upload-form" method="POST" enctype="multipart/form-data" action="/">
+            <input type="file" id="myFile" name="filename" accept=".csv">
+            <input type="submit">
+            <button id="show-button">Mostrar</button>
+            <button id="delete-button" action="/delete" >Eliminar</button>
+        </form>
+    </div>
 
-<div class="jumbotron">
-    <h1 style='text-align: center'>floyd load csv app</h1>
-</div>
-<div>
-    <p class="lead centered-text">Upload a csv file</p>
-    <form id="upload-form" method="POST" enctype="multipart/form-data" action="/">
-        <input type="file" id="myFile" name="filename" accept=".csv">
-        <input type="submit">
-        <button id="show-button">Mostrar</button>
-        <button id="delete-button" action="/delete" >Eliminar</button>
-    </form>
-</div>
+    <div id="table-container"></div>
 
-<div id="table-container"></div>
-
-<script>
-    $(document).ready(function(){
-        $('#upload-form').on('submit', function(event){
-            event.preventDefault();
-            var formData = new FormData(this);
-            $.ajax({
-                url: "/",
-                method:"POST",
-                data:formData,
-                contentType: false,
-                cache: false,
-                processData: false,
-                success:function(response){
-                    alert(response.message);
-                    $('#upload-form')[0].reset();
-                    $('#data').empty();
-                }
-            })
-        });
-    
-        $('#show-button').on('click', function(event){
-            event.preventDefault();
-            $.ajax({
-                url: "/show",
-                method:"GET",
-                success:function(response){
-                    var data = response.data;
-                    var html = '<table>';
-                    for(var i=0; i<data.length; i++){
-                        html += '<tr>';
-                        var row = data[i][0].split(';');
-                        for(var j=0; j<row.length; j++){
-                            html += '<td>' + row[j].split(':').join('<br>') + '</td>';
-                        }
-                        html += '</tr>';
+    <script>
+        $(document).ready(function(){
+            $('#upload-form').on('submit', function(event){
+                event.preventDefault();
+                var formData = new FormData(this);
+                $.ajax({
+                    url: "/",
+                    method:"POST",
+                    data:formData,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success:function(response){
+                        alert(response.message);
+                        $('#upload-form')[0].reset();
+                        $('#data').empty();
                     }
-                    html += '</table>';
-                    $('#table-container').html(html);
-                }
-            })
-        });
+                })
+            });
+        
+            $('#show-button').on('click', function(event){
+                event.preventDefault();
+                $.ajax({
+                    url: "/show",
+                    method:"GET",
+                    success:function(response){
+                        var data = response.data;
+                        var html = '<table>';
+                        for(var i=0; i<data.length; i++){
+                            html += '<tr>';
+                            var row = data[i][0].split(';');
+                            for(var j=0; j<row.length; j++){
+                                html += '<td>' + row[j].split(':').join('<br>') + '</td>';
+                            }
+                            html += '</tr>';
+                        }
+                        html += '</table>';
+                        $('#table-container').html(html);
+                    }
+                })
+            });
 
-        $('#delete-button').on('click', function(event){
-            event.preventDefault();
-            var formData = new FormData($('#delete-form')[0]);
-            $.ajax({
-                url: "/delete",
-                method:"POST",
-                data:formData,
-                contentType: false,
-                cache: false,
-                processData: false,
-                success:function(response){
-                    alert(response.message);
-                    $('#delete-form')[0].reset();
-                }
-            })
+            $('#delete-button').on('click', function(event){
+                event.preventDefault();
+                var formData = new FormData($('#delete-form')[0]);
+                $.ajax({
+                    url: "/delete",
+                    method:"POST",
+                    data:formData,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success:function(response){
+                        alert(response.message);
+                        $('#delete-form')[0].reset();
+                    }
+                })
+            });
         });
-    });
-</script>
-
-{% endblock %}
+    </script>
+</body>
+</html>
