@@ -1,7 +1,8 @@
 # Import necessary modules from the flask library
 from flask import Flask, render_template, request, redirect, jsonify
 # Import os and csv modules
-import os
+import os 
+import glob
 import csv
 import boto3
 from dotenv import load_dotenv
@@ -23,14 +24,14 @@ def index():
         if request.files:
             uploaded_files = request.files.getlist("filename")
             for file in uploaded_files:
-                # Read the file as a CSV before uploading to S3
+                # Read the file as a CSV
                 csv_file = csv.reader(file.read().decode('utf-8').splitlines())
-                # Reset file pointer to beginning before uploading to S3
-                file.seek(0)
-                s3.upload_fileobj(file, os.getenv('BUCKET_NAME'), file.filename)
-            return jsonify({'message': 'Successfully sent'})
+                # Specify the path where you want to save the file on your PC
+                save_path = '/Users/juanestebanfloyd/Documents/testFlaskApp/data/' + file.filename
+                # Save the file to the specified path
+                file.save(save_path)
+            return jsonify({'message': 'Successfully saved'})
     return render_template('index.html')
-
 
 @app.route('/show', methods=["GET"])
 def show():
@@ -49,13 +50,14 @@ def show():
 
 @app.route('/delete', methods=["POST"])
 def delete():
-    file_name = 'Veevart Organizations Report test.csv'  
-    bucket_name = os.getenv('BUCKET_NAME')
-    try:
-        s3.delete_object(Bucket=bucket_name, Key=file_name)
-        return jsonify({'message': 'Archivo eliminado exitosamente'})
-    except NoCredentialsError:
-        return jsonify({'error': 'No se encontraron las credenciales de AWS'})
+    # Especifica la ruta donde están los archivos CSV
+    save_path = '/Users/juanestebanfloyd/Documents/testFlaskApp/data/'
+    # Encuentra todos los archivos CSV en la ruta especificada
+    files = glob.glob(save_path + '*.csv')
+    for file_name in files:
+        # Elimina cada archivo
+        os.remove(file_name)
+    return jsonify({'message': 'Archivos eliminados exitosamente'})
 
 @app.route('/help')
 def help():
